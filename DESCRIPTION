@@ -1,0 +1,36 @@
+Package: SVmisc
+Type: Package
+Title: Miscellaneous functions, classes and methods by Shiv
+Version: 0.4-0
+Date: 2011-06-13
+Author: Shiv Venkatasubrahmanyam
+Maintainer: Shiv Venkatasubrahmanyam <user@domain>
+Description: This packages provides miscellaneous functions, classes
+    and methods that do not fall into any other package.
+Depends:
+    R (>= 2.11.0)
+Imports:
+    proto,
+    grid,
+    ggplot2,
+    reshape2,
+    scales,
+    plyr,
+    kinshipExtra
+LazyLoad: yes
+Collate:
+    'SVmisc.R'
+    'align.plots.grid.R'
+    'geom-hbar.R'
+    'ggplot-misc.R'
+    'heatmap.3.R'
+    'recycle.R'
+    'multiLinePlot.R'
+    'plot-ecmap.R'
+    'plot-liden.R'
+    'position-hcollide.r'
+    'position-hdodge.r'
+    'position-hfill.r'
+    'position-hstack.r'
+    'read-ecmap.R'
+    'read-liden.R'
