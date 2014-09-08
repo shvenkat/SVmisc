@@ -1,8 +1,7 @@
 Package: SVmisc
 Type: Package
 Title: Miscellaneous functions, classes and methods by Shiv
-Version: 0.4-0
-Date: 2011-06-13
+Version: 1.0-0
 Author: Shiv Venkatasubrahmanyam
 Maintainer: Shiv Venkatasubrahmanyam <user@domain>
 Description: This packages provides miscellaneous functions, classes
@@ -20,17 +19,20 @@ Imports:
 LazyLoad: yes
 Collate:
     'SVmisc.R'
-    'align.plots.grid.R'
-    'geom-hbar.R'
+    'ecmap-plot.R'
+    'ecmap-read.R'
+    'ggplot-align.R'
+    'ggplot-geom-hbar.R'
     'ggplot-misc.R'
-    'heatmap.3.R'
+    'ggplot-position-hcollide.r'
+    'ggplot-position-hdodge.r'
+    'ggplot-position-hfill.r'
+    'ggplot-position-hstack.r'
+    'heatmap.R'
+    'liden-plot.R'
+    'liden-read.R'
     'recycle.R'
-    'multiLinePlot.R'
-    'plot-ecmap.R'
-    'plot-liden.R'
-    'position-hcollide.r'
-    'position-hdodge.r'
-    'position-hfill.r'
-    'position-hstack.r'
-    'read-ecmap.R'
-    'read-liden.R'
+    'matrix-plot.R'
+    'merlin-plot.R'
+    'merlin-read.R'
+    'merlin-summary.R'

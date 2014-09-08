@@ -3,9 +3,9 @@
 #' Create a matrix indicating pedigree haplotype sharing by reading inferred
 #' allele sharing table produced by LIden (Wang et al. 2009 BMC Bioinformatics)
 #'
-#' @param lidenAlleleSharingTxt
+#' @param lidenHaploShareTxt
 #'      path to inferred_*_allele_sharing.txt in LIden output directory
-#' @param lidenAlleleSharingPlt
+#' @param lidenHaploSharePlt
 #'      path to inferred_*_allele_sharing.plt in LIden output directory
 #' @param founderId
 #'      string identifier of the founder with respect to the above files
@@ -18,10 +18,13 @@ readLidenHaploShare <- function(lidenHaploShareTxt, lidenHaploSharePlt,
                                 founderId) {
 
   # Read the haplotype sharing table, truncating the trailing tab on each line
-  haploShare <- read.table(pipe(paste("sed -e 's/\t$//'", lidenHaploShareTxt)),
-                          header = FALSE, sep = "\t", quote = "", row.names = 1,
-                          na.strings = "-1", colClasses = "integer",
-                          check.names = FALSE, comment.char = "")
+  haploShare <- read.table(pipe(paste(sprintf("zcat -f %s", lidenHaploShareTxt),
+                                      "sed -e 's/\t$//'",
+                                      sep = " | ")),
+                           header = FALSE, sep = "\t", quote = "",
+                           row.names = 1, na.strings = "-1",
+                           colClasses = "integer", check.names = FALSE,
+                           comment.char = "")
   haploShare <- as.matrix(haploShare)
   haploShareFounder <- haploShare[, 1:2]
   haploShare <- haploShare[, 3:ncol(haploShare)]    # Remove founder columns
@@ -43,11 +46,11 @@ readLidenHaploShare <- function(lidenHaploShareTxt, lidenHaploSharePlt,
   # sharing in each person.
 
   # Parse the "ytics" line in the LIden gnuplot file
-  haploMeta <- read.table(pipe(paste(sprintf("cat %s", lidenAlleleSharingPlt),
-                                    "sed -n -e 's/^set ytics (\\(.*\\))$/\\1/p'",
-                                    "tr ', ' '\\n\\t'",
-                                    "sed -e 's/^\\t//'",
-                                    sep = " | ")),
+  haploMeta <- read.table(pipe(paste(sprintf("zcat -f %s", lidenHaploSharePlt),
+                                     "sed -n -e 's/^set ytics (\\(.*\\))$/\\1/p'",
+                                     "tr ', ' '\\n\\t'",
+                                     "sed -e 's/^\\t//'",
+                                     sep = " | ")),
                           header = FALSE, sep = "\t",
                           col.names = c("Person", "Code"),
                           colClasses = c("character", "integer"),

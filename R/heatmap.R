@@ -4,7 +4,7 @@
 #' @inheritParams gplots::heatmap.2
 #' @author Shiv Venkatasubrahmanyam
 #' @export
-heatmap.3 <- 
+heatmap.2 <- 
 function (x, Rowv = TRUE, Colv = if (symm) "Rowv" else TRUE, 
     distfun = dist, hclustfun = hclust, dendrogram = c("both", 
         "row", "column", "none"), symm = FALSE, scale = c("none", 
