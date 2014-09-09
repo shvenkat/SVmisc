@@ -5,10 +5,13 @@
 #' @param chr
 #'      character vector of Chr levels to include in the plot. The default
 #'      value, "all", plots all data in dat
+#' @param hilight
+#'      optional dataframe with columns Chr, LeftPos and RightPos specifying
+#'      regions to be highlighted
 #' @return
 #'      ggplot
 #' @export
-plotMerlinLod <- function(dat, chr = "all") {
+plotMerlinLod <- function(dat, chr = "all", hilight = NULL) {
     if(!is.factor(dat$Chr)) {
         dat$Chr <- factor(dat$Chr)
     }
@@ -20,8 +23,8 @@ plotMerlinLod <- function(dat, chr = "all") {
     chr <- paste("chr", chr)
     plt <- ggplot(data = dat,
                   mapping = aes(x = Pos, y = LOD, group = Replicate)) +
-           geom_line(alpha = 0.1) +
-           labs(x = "Position in cM", y = "HLOD") +
+           geom_line(alpha = 0.2) +
+           labs(x = "Chromosomal Position (cM)", y = "LOD") +
            theme(panel.grid = element_blank())
     if(length(chr) > 1) {
         plt <- plt +
@@ -33,72 +36,17 @@ plotMerlinLod <- function(dat, chr = "all") {
                scale_x_continuous(breaks = c(0, 50, 100, 150, 200, 250))
     }
     plt <- plt + geom_abline(intercept = 3, slope = 0,
-                             color = "red", alpha = 0.3)
-    return(plt)
-}
-
-plotNonPAllChr <- function(dat) {
-    dat <- subset(dat,
-                  subset = !is.na(Chr) &
-                           as.character(Analysis) == nonPAnalysisName,
-                  select = c(Chr, Pos, ExLOD, Replicate))
-    levels(dat$Chr) <- paste("chr", levels(dat$Chr))
-    plt <- ggplot(data = dat,
-                  mapping = aes(x = Pos, y = ExLOD, group = Replicate)) +
-           geom_line(alpha = 0.1) +
-           facet_grid(~ Chr, scales = "free_x", space = "free_x") +
-           scale_x_continuous(breaks = c(0, 100, 200)) +
-           labs(x = "Position in cM", y = "LOD") +
-           theme(panel.grid = element_blank())
-    plt <- plt + geom_abline(intercept = 3, slope = 0,
-                             color = "red", alpha = 0.3)
-    return(plt)
-}
-plotNonPOneChr <- function(dat, chr) {
-    dat <- subset(dat,
-                  subset = as.character(Chr) == chr &
-                           as.character(Analysis) == nonPAnalysisName,
-                  select = c(Pos, ExLOD, Replicate))
-    plt <- ggplot(data = dat,
-                  mapping = aes(x = Pos, y = ExLOD, group = Replicate)) +
-           geom_line(alpha = 0.1) +
-           scale_x_continuous(breaks = c(0, 50, 100, 150, 200, 250)) +
-           labs(x = "Position in cM", y = "LOD") +
-           ggtitle(sprintf("chr %s", chr)) +
-           theme(panel.grid = element_blank())
-    plt <- plt + geom_abline(intercept = 3, slope = 0,
-                             color = "red", alpha = 0.3)
-    return(plt)
-}
-plotParaAllChr <- function(dat) {
-    dat <- subset(dat,
-                  subset = as.character(Model) == paraModelName,
-                  select = c(Chr, Pos, HLOD, Replicate))
-    levels(dat$Chr) <- paste("chr", levels(dat$Chr))
-    plt <- ggplot(data = dat,
-                  mapping = aes(x = Pos, y = HLOD, group = Replicate)) +
-           geom_line(alpha = 0.1) +
-           facet_grid(~ Chr, scales = "free_x", space = "free_x") +
-           scale_x_continuous(breaks = c(0, 100, 200)) +
-           labs(x = "Position in cM", y = "HLOD") +
-           theme(panel.grid = element_blank())
-    plt <- plt + geom_abline(intercept = 3, slope = 0,
-                             color = "red", alpha = 0.3)
-    return(plt)
-}
-plotParaOneChr <- function(dat, chr) {
-    dat <- subset(dat,
-                  subset = as.character(Chr) == chr &
-                           as.character(Model) == paraModelName,
-                  select = c(Pos, HLOD, Replicate))
-    plt <- ggplot(data = dat,
-                  mapping = aes(x = Pos, y = HLOD, group = Replicate)) +
-           geom_line(alpha = 0.1) +
-           scale_x_continuous(breaks = c(0, 50, 100, 150, 200, 250)) +
-           labs(x = "Position in cM", y = "HLOD") +
-           ggtitle(sprintf("chr %s", chr)) +
-           theme(panel.grid = element_blank())
-    plt <- plt + geom_abline(intercept = 3, slope = 0,
-                             color = "red", alpha = 0.3)
+                             color = "red", alpha = 0.5, linetype = 2)
+    if(!is.null(hilight)) {
+        hilight$Chr <- factor(paste("chr", as.character(hilight$Chr)))
+        hilight <- subset(hilight, subset = Chr %in% chr)
+        plt <- plt +
+               geom_rect(data = hilight,
+                         mapping = aes(xmin = LeftPos, xmax = RightPos),
+                         inherit.aes = FALSE,
+                         ymin = -Inf, ymax = Inf,
+                         fill = "red", alpha = 0.15,
+                         color = "red", size = 0)
+    }
     return(plt)
 }
