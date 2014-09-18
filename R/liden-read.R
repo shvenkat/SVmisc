@@ -70,17 +70,16 @@ readLidenHaploShare <- function(lidenHaploShareTxt, lidenHaploSharePlt,
   colnames(haploShare) <- personId
 
   # 2. Unify codes specifying haplotype sharing status to:
-  #    0 - special code for founder haplotype
-  #    1 - haplotype shared with homologous chromosome A of founder
-  #    2 - haplotype shared with homologous chromosome B of founder
-  #   NA - haplotype not shared with founder
+  #    0 - haplotype not shared with founder
+  #    1 - haplotype shared with homologous chromosome 1 of founder
+  #    2 - haplotype shared with homologous chromosome 2 of founder
+  #    3 - special code for founder haplotype
   aCodes <- as.integer(by(haploMeta$Code, haploMeta$Person, min))
   bCodes <- as.integer(by(haploMeta$Code, haploMeta$Person, max))
   haploShare[haploShare %in% aCodes] <- as.integer(1)
   haploShare[haploShare %in% bCodes] <- as.integer(2)
-
-  # Include a column for the founder
-  haploShareFounder <- matrix(as.integer(0), nrow = nrow(haploShare), ncol = 1)
+  haploShare[is.na(haploShare)]      <- as.integer(0)
+  haploShareFounder <- matrix(rep(as.integer(3), nrow(haploShare)), ncol = 1)
   colnames(haploShareFounder) <- founderId
   haploShare <- cbind(haploShare, haploShareFounder)
 
