@@ -69,7 +69,7 @@ ggLiden <- function(haploShare, hsValue, ped, phenotype, ...) {
 #'      invisible(lidenPlot(...))
 #'      dev.off()
 #' }
-#' @import kinshipExtra gridExtra SVmisc
+#' @import kinshipExtra gridExtra
 #' @export
 lidenPlot <- function(plotDat, hsValue, ped,
                       phenoScale, alpha = 0.05, bgColor = "gray70",
@@ -101,7 +101,8 @@ lidenPlot <- function(plotDat, hsValue, ped,
     pedHpos <- hposped(ped, pedAlign)
     plotDat$Person <- pedHpos[levels(plotDat$Person)][plotDat$Person]
     if(missing(ggped)) {
-      ggped <- ggpedigree(ped, pedAlign, bgcolor = "gray70")
+      ggped <- ggpedigree(ped, alignped(ped, method = "1d"),
+                          bgcolor = "gray70")
     }
   }
 
