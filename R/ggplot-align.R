@@ -244,3 +244,4 @@ align.plots.vert <- function (...)
 # See also:
 #   http://stackoverflow.com/a/13657460 (grid.arrange approach)
 #   https://raw.github.com/jbryer/multilevelPSA/master/R/align.R (update of ggExtra approach)
+#   http://stackoverflow.com/questions/17736434/aligning-distinct-non-facet-plots-in-ggplot2-using-rpy2-in-python
